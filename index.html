@@ -96,7 +96,7 @@
 <body>
   <div class="login-container">
     <h2>Entrar no sistema</h2>
-    <form onsubmit="return login()">
+    <form id="loginForm">
       <input type="text" id="username" placeholder="Digite seu nome de usuário" />
       <button type="submit">Acessar</button>
     </form>
@@ -107,12 +107,13 @@
   </footer>
 
   <script>
-    async function login() {
-      const username = document.getElementById("username").value.trim().toLowerCase();
+    async function login(event) {
+      if (event) event.preventDefault();
 
+      const username = document.getElementById("username").value.trim().toLowerCase();
       if (!username) {
         alert("Por favor, digite um nome de usuário.");
-        return false;
+        return;
       }
 
       try {
@@ -120,19 +121,21 @@
         const usuarios = await response.json();
 
         const userExists = usuarios.some(u => u.usuario.toLowerCase() === username);
-
         if (!userExists) {
           alert("Usuário não encontrado.");
-          return false;
+          return;
         }
 
-        window.location.href = `cadastrosPacs.html?user=${username}`;
-        return false; // evita reload
+        localStorage.setItem("loggedUser", username);
+        window.location.href = "cadastrosPacs.html";
       } catch (error) {
         alert("Erro ao validar o usuário.");
-        return false;
+        console.error(error);
       }
     }
+
+    // Ativa login com botão ou tecla Enter
+    document.getElementById("loginForm").addEventListener("submit", login);
   </script>
 </body>
 </html>

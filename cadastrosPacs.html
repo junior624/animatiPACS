@@ -221,9 +221,8 @@
       "Adição de equipamentos: Enviar IP | Porta | Aetitle de cada equipamento se possível.",
       "Adição de impressoras DRY (Película): Enviar IP | Porta | Aetitle de cada impressora se possível."
     ];
-
+  
     const container = document.getElementById("tasks-container");
-
     tasks.forEach((task, index) => {
       const div = document.createElement("div");
       div.className = "task";
@@ -236,64 +235,70 @@
       `;
       container.appendChild(div);
     });
-
+  
     let linkPersonalizado = "";
     let userCarregado = false;
-
+  
     async function carregarUsuario() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const usuario = urlParams.get('user');
-
+      const usuario = localStorage.getItem("loggedUser");
+  
       if (!usuario) {
         alert("Usuário não identificado. Faça login.");
-        window.location.href = "login.html";
+        window.location.href = "index.html";
         return;
       }
-
-      const response = await fetch('usuarios.json');
-      const usuarios = await response.json();
-      const user = usuarios.find(u => u.usuario === usuario);
-
-      if (!user) {
-        alert("Usuário inválido.");
-        window.location.href = "login.html";
-        return;
+  
+      try {
+        const response = await fetch('usuarios.json');
+        const usuarios = await response.json();
+        const user = usuarios.find(u => u.usuario.toLowerCase() === usuario.toLowerCase());
+  
+        if (!user) {
+          alert("Usuário inválido.");
+          window.location.href = "index.html";
+          return;
+        }
+  
+        linkPersonalizado = user.link;
+        userCarregado = true;
+  
+        document.getElementById("userDisplay").textContent = user.usuario;
+      } catch (err) {
+        alert("Erro ao carregar usuário.");
+        console.error(err);
       }
-
-      linkPersonalizado = user.link;
-      userCarregado = true;
     }
-
+  
     carregarUsuario();
-
+  
     function generateText() {
       if (!userCarregado) {
         alert("Aguarde o carregamento do usuário...");
         return;
       }
-
-      let result = "Conforme conversamos, segue lista de pendências da implantação animatiPACS relativas ao nosso último encontro:\n";
-
+  
+      let result = "Conforme conversamos, segue lista de pendências da implantação animatiPACS relativas ao nosso último encontro:\n\n";
+  
       tasks.forEach((task, index) => {
         const radios = document.getElementsByName(`task-${index}`);
         if ([...radios].find(r => r.checked && r.value === "1")) {
           result += `- *${task}*\n`;
         }
       });
-
+  
       result += "\nTodos os arquivos devem ser enviados para implantacao@animati.com.br\n";
       result += `Caso seja necessário, é possível marcar um encontro de 15 minutos através do link: ${linkPersonalizado}`;
-
+  
       document.getElementById("result").value = result;
     }
-
+  
     function copyToClipboard() {
       const textArea = document.getElementById("result");
       textArea.select();
       document.execCommand("copy");
       alert("Texto copiado para a área de transferência!");
     }
-
+  
     function clearSelection() {
       tasks.forEach((_, index) => {
         const radios = document.getElementsByName(`task-${index}`);
@@ -303,16 +308,19 @@
       });
       clearText();
     }
-
+  
     function clearText() {
       document.getElementById("result").value = "";
     }
-
+  
     function toggleMenu() {
       const menu = document.getElementById("menu");
       menu.classList.toggle("show");
     }
   </script>
+  
+  <p id="userStatus" style="display: none;">Usuário logado: <span id="userDisplay"></span></p>
+
   <footer style="text-align: center; font-size: 12px; color: #999; margin-top: 40px; padding: 15px 10px; user-select: none;">
     Ambiente interno de suporte à implantação Animati |
     Uso exclusivo da equipe |
