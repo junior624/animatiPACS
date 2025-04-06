@@ -2,23 +2,28 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Fase de cadastros | animatiPACS</title>
+  <title>Links Úteis | animatiPACS</title>
   <style>
-    /* GERAL */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding-top: 60px; /* espaço para a navbar fixa */
-      background: #f8f9fa;
+      padding: 0;
+      background: #f0f2f5;
     }
-  
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
+
     h1 {
       text-align: center;
-      color: #333;
-      margin-bottom: 20px;
+      color: #0a0a0a;
+      margin: 30px 0;
     }
-  
-    /* NAVBAR */
+
     .navbar {
       background-color: #007BFF;
       position: fixed;
@@ -31,7 +36,7 @@
       align-items: center;
       justify-content: center;
     }
-  
+
     .menu {
       display: flex;
       justify-content: space-between;
@@ -40,12 +45,12 @@
       padding: 0;
       list-style: none;
     }
-  
+
     .menu li {
       flex: 1;
       text-align: center;
     }
-  
+
     .menu li a {
       display: block;
       color: white;
@@ -54,21 +59,77 @@
       padding: 18px 0;
       transition: background-color 0.3s, transform 0.2s;
     }
-  
+
     .menu li a:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
-  
+
     .menu li a.active {
       background-color: white;
       color: #007BFF;
     }
-  
+
     .menu-toggle {
       display: none;
     }
-  
-    /* RESPONSIVO */
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .link-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .link-card:hover {
+      transform: scale(1.02);
+    }
+
+    .link-card h3 {
+      margin-bottom: 8px;
+      color: #007BFF;
+    }
+
+    .link-card .description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .link-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .link-button:hover {
+      background-color: #0056b3;
+      transform: scale(1.03);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      padding: 15px 10px;
+      margin-top: auto;
+    }
+
     @media (max-width: 768px) {
       .menu-toggle {
         display: block;
@@ -80,7 +141,7 @@
         cursor: pointer;
         z-index: 10;
       }
-  
+
       .menu {
         flex-direction: column;
         position: absolute;
@@ -90,112 +151,134 @@
         width: 100%;
         display: none;
       }
-  
+
       .menu.show {
         display: flex;
       }
-  
+
       .menu li {
         flex: none;
       }
-  
+
       .menu li a {
         padding: 14px 0;
       }
     }
-  
-    /* TASKS */
-    .task {
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      padding: 10px 15px;
-      margin: 10px auto;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      gap: 20px;
-      max-width: 900px;
-    }
-  
-    .task-label {
-      flex-grow: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  
-    .radio-group {
-      flex-shrink: 0;
-      display: flex;
-      gap: 10px;
-      white-space: nowrap;
-    }
-  
-    .radio-group label {
-      margin-right: 10px;
-      font-weight: normal;
-    }
-  
-    /* TEXTAREA */
-    textarea {
-      width: 80%;
-      height: 160px;
-      margin: 20px auto;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      resize: none;
-      display: block;
-    }
-  
-    /* BOTÕES */
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-    }
-  
-    button {
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-  
-    button:hover {
-      background-color: #0056b3;
-      transform: scale(1.02);
-    }
   </style>
-  
-  
 </head>
 <body>
   <div class="navbar">
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul class="menu" id="menu">
-      <li><a href="cadastrosPacs.html" >Fase de Cadastros AP</a></li>
-      <li><a href="aba1.html">aba nova 1</a></li>
-      <li><a href="aba2.html" >aba nova 2</a></li>
-      <li><a href="aba3.html">aba nova 3</a></li>
+      <li><a href="cadastrosPacs.html">Fase de Cadastros AP</a></li>
+      <li><a href="aba1.html">Aba Nova 1</a></li>
+      <li><a href="aba2.html">Aba Nova 2</a></li>
+      <li><a href="aba3.html">Aba Nova 3</a></li>
       <li><a href="aba4.html" class="active">Links Úteis</a></li>
     </ul>
   </div>
 
-  <h1>EM DESENVOLVIMENTO</h1>
+  <div class="page-wrapper">
+    <h1>Links Úteis</h1>
 
+    <div class="grid-container">
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+      <div class="link-card">
+        <h3>Google</h3>
+        <p class="description">Site para pesquisas na internet</p>
+        <a href="https://www.google.com" target="_blank" class="link-button">Acessar</a>
+      </div>
+
+      <!-- Repita os cards conforme necessário -->
+    </div>
+
+    <footer>
+      Ambiente interno de suporte à implantação Animati | Uso exclusivo da equipe | Contribuições são bem-vindas
+      <br>
+      <span style="color: #bbb;">Em desenvolvimento por Antonio Furtado · 2025</span>
+    </footer>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.classList.toggle("show");
+    }
+  </script>
 </body>
 </html>
