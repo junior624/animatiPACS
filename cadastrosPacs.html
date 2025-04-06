@@ -200,7 +200,7 @@
 
   <div class="buttons">
     <button onclick="generateText()">Gerar Texto</button>
-    <button onclick="copyToClipboard()">Copiar para WhatsApp</button>
+    <!--<button onclick="copyToClipboard()">Copiar para WhatsApp</button>-->
     <button onclick="clearSelection()">Limpar Seleção</button>
     <button onclick="clearText()">Limpar Área de Texto</button>
   </div>
@@ -244,7 +244,7 @@
       const usuario = localStorage.getItem("loggedUser");
   
       if (!usuario) {
-        alert("Usuário não identificado. Faça login.");
+        showToast("Usuário não identificado. Faça login.", true);
         window.location.href = "index.html";
         return;
       }
@@ -255,7 +255,7 @@
         const user = usuarios.find(u => u.usuario.toLowerCase() === usuario.toLowerCase());
   
         if (!user) {
-          alert("Usuário inválido.");
+          showToast("Usuário inválido.", true);
           window.location.href = "index.html";
           return;
         }
@@ -265,7 +265,7 @@
   
         document.getElementById("userDisplay").textContent = user.usuario;
       } catch (err) {
-        alert("Erro ao carregar usuário.");
+        showToast("Erro ao carregar usuário.", true);
         console.error(err);
       }
     }
@@ -274,7 +274,7 @@
   
     function generateText() {
       if (!userCarregado) {
-        alert("Aguarde o carregamento do usuário...");
+        showToast("Aguarde o carregamento do usuário...", true);
         return;
       }
   
@@ -290,14 +290,14 @@
       result += "\nTodos os arquivos devem ser enviados para implantacao@animati.com.br\n";
       result += `Caso seja necessário, é possível marcar um encontro de 15 minutos através do link: ${linkPersonalizado}`;
   
-      document.getElementById("result").value = result;
-    }
-  
-    function copyToClipboard() {
       const textArea = document.getElementById("result");
+      textArea.value = result;
+  
       textArea.select();
+      textArea.setSelectionRange(0, 99999);
       document.execCommand("copy");
-      alert("Texto copiado para a área de transferência!");
+  
+      showToast("Texto gerado e copiado para a área de transferência!");
     }
   
     function clearSelection() {
@@ -318,7 +318,37 @@
       const menu = document.getElementById("menu");
       menu.classList.toggle("show");
     }
+  
+    // 🔔 Toast visual (substitui alert)
+    function showToast(message, isError = false) {
+      const toast = document.createElement("div");
+      toast.textContent = message;
+      toast.style.position = "fixed";
+      toast.style.bottom = "20px";
+      toast.style.right = "20px";
+      toast.style.padding = "12px 20px";
+      toast.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+      toast.style.color = "white";
+      toast.style.borderRadius = "6px";
+      toast.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+      toast.style.zIndex = "9999";
+      toast.style.opacity = "0";
+      toast.style.transition = "opacity 0.5s ease";
+  
+      document.body.appendChild(toast);
+  
+      setTimeout(() => {
+        toast.style.opacity = "1";
+      }, 100);
+  
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => document.body.removeChild(toast), 500);
+      }, 3000);
+    }
   </script>
+  
+  
   
   <p id="userStatus" style="display: none;">Usuário logado: <span id="userDisplay"></span></p>
 
