@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | animatiPACS</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f0f2f5, #e0e6ed);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .login-container {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #007BFF;
+      font-weight: 600;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #007BFF;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.02);
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 15px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      width: 100%;
+      user-select: none;
+    }
+
+    @media (max-height: 500px) {
+      .footer {
+        position: relative;
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Entrar no sistema</h2>
+    <form onsubmit="return login()">
+      <input type="text" id="username" placeholder="Digite seu nome de usuário" />
+      <button type="submit">Acessar</button>
+    </form>
+  </div>
+
+  <footer class="footer">
+    Ambiente interno de suporte à implantação Animati | Uso exclusivo da equipe | Contribuições são bem-vindas <br> Em desenvolvimento por Antonio Furtado 2025
+  </footer>
+
+  <script>
+    async function login() {
+      const username = document.getElementById("username").value.trim().toLowerCase();
+
+      if (!username) {
+        alert("Por favor, digite um nome de usuário.");
+        return false;
+      }
+
+      try {
+        const response = await fetch("usuarios.json");
+        const usuarios = await response.json();
+
+        const userExists = usuarios.some(u => u.usuario.toLowerCase() === username);
+
+        if (!userExists) {
+          alert("Usuário não encontrado.");
+          return false;
+        }
+
+        window.location.href = `cadastrosPacs.html?user=${username}`;
+        return false; // evita reload
+      } catch (error) {
+        alert("Erro ao validar o usuário.");
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>

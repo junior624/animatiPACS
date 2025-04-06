@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Fase de cadastros | animatiPACS</title>
+  <style>
+    /* GERAL */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-top: 60px;
+      background: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background-color: #007BFF;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .menu li {
+      flex: 1;
+      text-align: center;
+    }
+
+    .menu li a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 18px 0;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .menu li a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .menu li a.active {
+      background-color: white;
+      color: #007BFF;
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+        position: absolute;
+        left: 20px;
+        font-size: 24px;
+        color: white;
+        top: 18px;
+        cursor: pointer;
+        z-index: 10;
+      }
+
+      .menu {
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #007BFF;
+        width: 100%;
+        display: none;
+      }
+
+      .menu.show {
+        display: flex;
+      }
+
+      .menu li {
+        flex: none;
+      }
+
+      .menu li a {
+        padding: 14px 0;
+      }
+    }
+
+    /* TASKS */
+    .task {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      padding: 10px 15px;
+      margin: 10px auto;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      gap: 20px;
+      max-width: 900px;
+    }
+
+    .task-label {
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .radio-group {
+      flex-shrink: 0;
+      display: flex;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .radio-group label {
+      margin-right: 10px;
+      font-weight: normal;
+    }
+
+    /* TEXTAREA */
+    textarea {
+      width: 80%;
+      height: 160px;
+      margin: 20px auto;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: none;
+      display: block;
+    }
+
+    /* BOTÕES */
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <ul class="menu" id="menu">
+      <li><a href="cadastrosPacs.html" class="active">Fase de Cadastros AP</a></li>
+      <li><a href="aba1.html">aba nova 1</a></li>
+      <li><a href="aba2.html">aba nova 2</a></li>
+      <li><a href="aba3.html">aba nova 3</a></li>
+      <li><a href="aba4.html">Links Úteis</a></li>
+    </ul>
+  </div>
+
+  <h1>Fase de Cadastros | animatiPACS</h1>
+
+  <div id="tasks-container"></div>
+
+  <div class="buttons">
+    <button onclick="generateText()">Gerar Texto</button>
+    <button onclick="copyToClipboard()">Copiar para WhatsApp</button>
+    <button onclick="clearSelection()">Limpar Seleção</button>
+    <button onclick="clearText()">Limpar Área de Texto</button>
+  </div>
+
+  <textarea id="result" readonly></textarea>
+
+  <script>
+    const tasks = [
+      "Enviar arquivo logo em alta definição.",
+      "Enviar arquivo do papel timbrado.",
+      "Enviar modelo de laudo impresso com cabeçalho.",
+      "Enviar modelo de impressão de imagens utilizado atualmente.",
+      "Enviar formulários de anamnese para adição no animatiPACS.",
+      "Informar serviço de telelaudo sobre a implantação do animatiPACS.",
+      "Cadastrar usuários (Radiologistas, Recepção, Técnicos...).",
+      "Enviar assinaturas dos radiologistas (Rúbrica em folha branca, sem linhas ou carimbos. Pode ser uma foto).",
+      "Adicionar templates de laudo (Máscaras de laudo) dos radiologistas.",
+      "Adicionar frases/códigos dos radiologistas se houver.",
+      "Adição de equipamentos: Enviar IP | Porta | Aetitle de cada equipamento se possível.",
+      "Adição de impressoras DRY (Película): Enviar IP | Porta | Aetitle de cada impressora se possível."
+    ];
+
+    const container = document.getElementById("tasks-container");
+
+    tasks.forEach((task, index) => {
+      const div = document.createElement("div");
+      div.className = "task";
+      div.innerHTML = `
+        <div class="task-label">${task}</div>
+        <div class="radio-group">
+          <label><input type="radio" name="task-${index}" value="1"> Sim</label>
+          <label><input type="radio" name="task-${index}" value="0" checked> Não</label>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    let linkPersonalizado = "";
+    let userCarregado = false;
+
+    async function carregarUsuario() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const usuario = urlParams.get('user');
+
+      if (!usuario) {
+        alert("Usuário não identificado. Faça login.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const response = await fetch('usuarios.json');
+      const usuarios = await response.json();
+      const user = usuarios.find(u => u.usuario === usuario);
+
+      if (!user) {
+        alert("Usuário inválido.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      linkPersonalizado = user.link;
+      userCarregado = true;
+    }
+
+    carregarUsuario();
+
+    function generateText() {
+      if (!userCarregado) {
+        alert("Aguarde o carregamento do usuário...");
+        return;
+      }
+
+      let result = "Conforme conversamos, segue lista de pendências da implantação animatiPACS relativas ao nosso último encontro:\n";
+
+      tasks.forEach((task, index) => {
+        const radios = document.getElementsByName(`task-${index}`);
+        if ([...radios].find(r => r.checked && r.value === "1")) {
+          result += `- *${task}*\n`;
+        }
+      });
+
+      result += "\nTodos os arquivos devem ser enviados para implantacao@animati.com.br\n";
+      result += `Caso seja necessário, é possível marcar um encontro de 15 minutos através do link: ${linkPersonalizado}`;
+
+      document.getElementById("result").value = result;
+    }
+
+    function copyToClipboard() {
+      const textArea = document.getElementById("result");
+      textArea.select();
+      document.execCommand("copy");
+      alert("Texto copiado para a área de transferência!");
+    }
+
+    function clearSelection() {
+      tasks.forEach((_, index) => {
+        const radios = document.getElementsByName(`task-${index}`);
+        radios.forEach(r => {
+          if (r.value === "0") r.checked = true;
+        });
+      });
+      clearText();
+    }
+
+    function clearText() {
+      document.getElementById("result").value = "";
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.classList.toggle("show");
+    }
+  </script>
+  <footer style="text-align: center; font-size: 12px; color: #999; margin-top: 40px; padding: 15px 10px; user-select: none;">
+    Ambiente interno de suporte à implantação Animati |
+    Uso exclusivo da equipe |
+    Contribuições são bem-vindas
+    <br>
+    <span style="color: #bbb;">Em desenvolvimento por Antonio Furtado · 2025</span>
+  </footer>
+</body>
+</html>

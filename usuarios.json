@@ -1,0 +1,28 @@
+[
+    {
+      "usuario": "antonio",
+      "senha": "1234",
+      "nome": "Antonio",
+      "link": "https://calendar.app.google/batata"
+    },
+    {
+      "usuario": "marcello",
+      "senha": "1234",
+      "nome": "Marcello",
+      "link": "https://calendar.app.google/abobora"
+    },
+    {
+        "usuario": "aline",
+        "senha": "1234",
+        "nome": "aline",
+        "link": "https://calendar.app.google/biscoito"
+      },
+    {
+      "usuario": "geraldo",
+      "senha": "teste",
+      "nome": "Geraldo",
+      "link": "https://calendar.app.google/abacaxi"
+    }
+    
+  ]
+  
