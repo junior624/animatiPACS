@@ -3,23 +3,20 @@
 <head>
   <link rel="icon" href="favicon.png" type="image/png">
   <meta charset="UTF-8">
-  <title>Fase de cadastros | animatiPACS</title>
+  <title>Fase de Cadastros | animatiPACS</title>
   <style>
-    /* GERAL */
+    /* (estilos mantidos iguais ao original) */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding-top: 60px; /* espaço para a navbar fixa */
+      padding-top: 60px;
       background: #f8f9fa;
     }
-  
     h1 {
       text-align: center;
       color: #333;
       margin-bottom: 20px;
     }
-  
-    /* NAVBAR */
     .navbar {
       background-color: #007BFF;
       position: fixed;
@@ -32,7 +29,6 @@
       align-items: center;
       justify-content: center;
     }
-  
     .menu {
       display: flex;
       justify-content: space-between;
@@ -41,12 +37,10 @@
       padding: 0;
       list-style: none;
     }
-  
     .menu li {
       flex: 1;
       text-align: center;
     }
-  
     .menu li a {
       display: block;
       color: white;
@@ -55,21 +49,16 @@
       padding: 18px 0;
       transition: background-color 0.3s, transform 0.2s;
     }
-  
     .menu li a:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
-  
     .menu li a.active {
       background-color: white;
       color: #007BFF;
     }
-  
     .menu-toggle {
       display: none;
     }
-  
-    /* RESPONSIVO */
     @media (max-width: 768px) {
       .menu-toggle {
         display: block;
@@ -81,7 +70,6 @@
         cursor: pointer;
         z-index: 10;
       }
-  
       .menu {
         flex-direction: column;
         position: absolute;
@@ -91,53 +79,56 @@
         width: 100%;
         display: none;
       }
-  
       .menu.show {
         display: flex;
       }
-  
       .menu li {
         flex: none;
       }
-  
       .menu li a {
         padding: 14px 0;
       }
     }
-  
-    /* TASKS */
+    #tasks-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    @media (max-width: 1100px) {
+      #tasks-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 700px) {
+      #tasks-container {
+        grid-template-columns: 1fr;
+      }
+    }
     .task {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       background-color: #fff;
-      padding: 10px 15px;
-      margin: 10px auto;
+      padding: 15px 20px;
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      gap: 20px;
-      max-width: 900px;
     }
-  
     .task-label {
-      flex-grow: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      flex: 1;
+      margin-right: 20px;
+      word-break: break-word;
     }
-  
     .radio-group {
-      flex-shrink: 0;
-      display: flex;
-      gap: 10px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
-  
     .radio-group label {
-      margin-right: 10px;
+      margin-left: 10px;
       font-weight: normal;
     }
-  
-    /* TEXTAREA */
     textarea {
       width: 80%;
       height: 160px;
@@ -149,8 +140,6 @@
       resize: none;
       display: block;
     }
-  
-    /* BOTÕES */
     .buttons {
       margin-top: 20px;
       display: flex;
@@ -158,7 +147,6 @@
       justify-content: center;
       gap: 12px;
     }
-  
     button {
       padding: 10px 20px;
       background-color: #007BFF;
@@ -175,29 +163,198 @@
       min-height: 40px;
       transition: background-color 0.3s, transform 0.2s;
     }
-  
     button:hover {
       background-color: #0056b3;
       transform: scale(1.02);
     }
   </style>
-  
-  
 </head>
 <body>
   <div class="navbar">
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul class="menu" id="menu">
-      <li><a href="cadastrosPacs.html">Fase de Cadastros AP</a></li>
-      <li><a href="aba1.html"  class="active">Fase de Cadastros NR</a></li>
+      <li><a href="cadastrosPacs.html" >Fase de Cadastros AP</a></li>
+      <li><a href="aba1.html" class="active">Fase de Cadastros NR</a></li>
       <li><a href="aba2.html">aba nova 2</a></li>
       <li><a href="aba3.html">aba nova 3</a></li>
       <li><a href="aba4.html">Links Úteis</a></li>
     </ul>
   </div>
 
-  <h1>EM DESENVOLVIMENTO</h1>
+  <h1>Fase de Cadastros | netRIS</h1>
 
+  <div id="tasks-container"></div>
 
+  <div class="buttons">
+    <button onclick="generateText()">Gerar Texto</button>
+    <button onclick="clearSelection()">Limpar Seleção</button>
+    <button onclick="clearText()">Limpar Área de Texto</button>
+  </div>
+
+  <textarea id="result" readonly></textarea>
+
+  <script>
+    const tasks = [
+      "Cadastrar usuários (colaboradores que irão acessar o sistema e médicos executantes)",
+      "Cadastrar grupos de usuários",
+      "Criar grupo de honorários e cadastrar regras",
+      "Cadastrar itens de honorário médico",
+      "Cadastrar dados da clínica (empresa)",
+      "Cadastrar dados das filiais",
+      "Cadastrar modalidades e procedimentos",
+      "Cadastrar aparelhos para agendamento",
+      "Cadastrar salas para agendamento",
+      "Cadastrar escalas de atendimento",
+      "Cadastrar indisponibilidades",
+      "Cadastrar restrições de agendamento",
+      "Cadastro e apresentação do agendamento online",
+      "Cadastrar categorias de estoque",
+      "Cadastrar estoques",
+      "Cadastrar fornecedores",
+      "Cadastrar materiais e kits de materiais",
+      "Cadastrar plano de contas",
+      "Cadastrar centros de custo",
+      "Cadastrar contas e caixas",
+      "Cadastrar formas de pagamento",
+      "Cadastrar convênios",
+      "Cadastrar planos",
+      "Cadastrar tabelas de preço",
+      "Cadastrar indexadores e portes",
+      "Precificar procedimentos e vincular a tabelas",
+      "Criar regras de atendimento",
+      "Criar motivos de situação",
+      "Cadastrar formas de entrega",
+      "Cadastrar modelos de impressão",
+      "Criar usuários no NetReport",
+      "Demonstrar o funcionamento do NetReport",
+      "Verificar se há interesse em integração com emissão de NF e WhatsApp",
+      "Vasco da gama",
+      "Vasco da gama",
+      "Vasco da gama"
+    ];
+
+    const container = document.getElementById("tasks-container");
+    tasks.forEach((task, index) => {
+      const div = document.createElement("div");
+      div.className = "task";
+      div.innerHTML = `
+        <div class="task-label">${task}</div>
+        <div class="radio-group">
+          <label><input type="radio" name="task-${index}" value="1"> Sim</label>
+          <label><input type="radio" name="task-${index}" value="0" checked> Não</label>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    let linkPersonalizado = "";
+    let userCarregado = false;
+
+    async function carregarUsuario() {
+      const usuario = localStorage.getItem("loggedUser");
+      if (!usuario) {
+        showToast("Usuário não identificado. Faça login.", true);
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const response = await fetch('usuarios.json');
+        const usuarios = await response.json();
+        const user = usuarios.find(u => u.usuario.toLowerCase() === usuario.toLowerCase());
+        if (!user) {
+          showToast("Usuário inválido.", true);
+          window.location.href = "index.html";
+          return;
+        }
+
+        linkPersonalizado = user.link;
+        userCarregado = true;
+        document.getElementById("userDisplay").textContent = user.usuario;
+      } catch (err) {
+        showToast("Erro ao carregar usuário.", true);
+        console.error(err);
+      }
+    }
+
+    carregarUsuario();
+
+    function generateText() {
+      if (!userCarregado) {
+        showToast("Aguarde o carregamento do usuário...", true);
+        return;
+      }
+
+      let result = "Conforme conversamos, segue lista de pendências da implantação netRIS relativas ao nosso último encontro:\n\n";
+      tasks.forEach((task, index) => {
+        const radios = document.getElementsByName(`task-${index}`);
+        if ([...radios].find(r => r.checked && r.value === "1")) {
+          result += `- *${task}*\n`;
+        }
+      });
+
+      result += `\nCaso seja necessário, é possível marcar um encontro de 15 minutos através do link: ${linkPersonalizado}`;
+      const textArea = document.getElementById("result");
+      textArea.value = result;
+
+      textArea.select();
+      textArea.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+
+      showToast("Texto gerado e copiado para a área de transferência!");
+    }
+
+    function clearSelection() {
+      tasks.forEach((_, index) => {
+        const radios = document.getElementsByName(`task-${index}`);
+        radios.forEach(r => {
+          if (r.value === "0") r.checked = true;
+        });
+      });
+      clearText();
+    }
+
+    function clearText() {
+      document.getElementById("result").value = "";
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.classList.toggle("show");
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.createElement("div");
+      toast.textContent = message;
+      toast.style.position = "fixed";
+      toast.style.bottom = "20px";
+      toast.style.right = "20px";
+      toast.style.padding = "12px 20px";
+      toast.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+      toast.style.color = "white";
+      toast.style.borderRadius = "6px";
+      toast.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+      toast.style.zIndex = "9999";
+      toast.style.opacity = "0";
+      toast.style.transition = "opacity 0.5s ease";
+
+      document.body.appendChild(toast);
+      setTimeout(() => toast.style.opacity = "1", 100);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => document.body.removeChild(toast), 500);
+      }, 3000);
+    }
+  </script>
+
+  <p id="userStatus" style="display: none;">Usuário logado: <span id="userDisplay"></span></p>
+
+  <footer style="text-align: center; font-size: 12px; color: #999; margin-top: 40px; padding: 15px 10px; user-select: none;">
+    Ambiente interno de suporte à implantação Animati |
+    Uso exclusivo da equipe |
+    Contribuições são bem-vindas
+    <br>
+    <span style="color: #bbb;">Em desenvolvimento por Antonio Furtado · 2025</span>
+  </footer>
 </body>
 </html>
