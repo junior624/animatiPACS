@@ -3,7 +3,7 @@
       "usuario": "antonio",
       "senha": "1234",
       "nome": "Antonio",
-      "link": "https://calendar.app.google/batata"
+      "link": "https://calendar.app.google/bXvEVsiGCziT94sw5"
     },
     {
       "usuario": "marcello",
@@ -18,6 +18,18 @@
         "link": "https://calendar.app.google/biscoito"
       },
       {
+        "usuario": "camilo",
+        "senha": "1234",
+        "nome": "Camilo",
+        "link": "https://calendar.app.google/camilo"
+      },
+      {
+        "usuario": "danilo",
+        "senha": "1234",
+        "nome": "danilo",
+        "link": "https://calendar.app.google/danilo"
+      },
+      {
         "usuario": "vieira",
         "senha": "1234",
         "nome": "vieira",
@@ -27,7 +39,7 @@
       "usuario": "geraldo",
       "senha": "teste",
       "nome": "Geraldo",
-      "link": "https://calendar.app.google/abacaxi"
+      "link": "https://calendar.app.google/5UUYfNyefMeN2es38"
     }
     
   ]
