@@ -190,13 +190,167 @@
     <ul class="menu" id="menu">
       <li><a href="cadastrosPacs.html" >Fase de Cadastros AP</a></li>
       <li><a href="aba1.html">Fase de Cadastros NR</a></li>
-      <li><a href="aba2.html" class="active">aba nova 2</a></li>
+      <li><a href="aba2.html" class="active">Teste - homologação AP</a></li>
       <li><a href="aba3.html">aba nova 3</a></li>
       <li><a href="aba4.html">Links Úteis</a></li>
     </ul>
   </div>
 
-  <h1>EM DESENVOLVIMENTO</h1>
+  <h1>Fase de Cadastros | netRIS</h1>
 
+  <div id="tasks-container"></div>
+
+  <div class="buttons">
+    <button onclick="generateText()">Gerar Texto</button>
+    <button onclick="clearSelection()">Limpar Seleção</button>
+    <button onclick="clearText()">Limpar Área de Texto</button>
+  </div>
+
+  <textarea id="result" readonly></textarea>
+
+  <script>
+    const tasks = [
+      "Realizar o cadastro do paciente no sistema RIS (verificar se é necessário gerar entrada sem imagens no PACS).",
+      "Testar o protocolo de acesso do paciente, gerado via RIS ou via PACS.",
+      "Validar o encaminhamento da worklist para todos os equipamentos envolvidos.",
+      "Verificar o envio correto de imagens a partir de todos os equipamentos.",
+      "Testar o envio e o retorno de exames para telelaudo, se aplicável.",
+      "Validar o envio de filmes para impressão a partir dos equipamentos, com armazenamento no animatiPACS (impressão sob demanda).",
+      "Testar a liberação do laudo e validar os templates de impressão utilizados.",
+      "Confirmar o retorno correto dos laudos e imagens ao sistema RIS, se aplicável.",
+      "Verificar o processo de cancelamento de laudo após visualização.",
+      "Testar a impressão de imagens na Central de Impressões e o processo de montagem de impressão na workstation.",
+      "Validar o acesso ao sistema pelo paciente e pelo médico solicitante.",
+      "Treinamento: Médicos laudistas - 1 hora por turma.",
+      "Treinamento: Recepção/Call-center/Entrega de resultados - 1 hora por turma.",
+      "Treinamento: Administradores - 1 hora e 30 minutos por turma.",
+      "Treinamento: Técnicos/Enfermagem - 1 hora por turma.",
+      "Treinamento: Digitadores - 1 hora por turma.",
+      
+    ];
+
+    const container = document.getElementById("tasks-container");
+    tasks.forEach((task, index) => {
+      const div = document.createElement("div");
+      div.className = "task";
+      div.innerHTML = `
+        <div class="task-label">${task}</div>
+        <div class="radio-group">
+          <label><input type="radio" name="task-${index}" value="1"> Sim</label>
+          <label><input type="radio" name="task-${index}" value="0" checked> Não</label>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    let linkPersonalizado = "";
+    let userCarregado = false;
+
+    async function carregarUsuario() {
+      const usuario = localStorage.getItem("loggedUser");
+      if (!usuario) {
+        showToast("Usuário não identificado. Faça login.", true);
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const response = await fetch('usuarios.json');
+        const usuarios = await response.json();
+        const user = usuarios.find(u => u.usuario.toLowerCase() === usuario.toLowerCase());
+        if (!user) {
+          showToast("Usuário inválido.", true);
+          window.location.href = "index.html";
+          return;
+        }
+
+        linkPersonalizado = user.link;
+        userCarregado = true;
+        document.getElementById("userDisplay").textContent = user.usuario;
+      } catch (err) {
+        showToast("Erro ao carregar usuário.", true);
+        console.error(err);
+      }
+    }
+
+    carregarUsuario();
+
+    function generateText() {
+      if (!userCarregado) {
+        showToast("Aguarde o carregamento do usuário...", true);
+        return;
+      }
+
+      let result = "Conforme conversamos, segue lista de atividades que deverão ser realizadas durante o periodo de homologação do sistema:\n\n";
+      tasks.forEach((task, index) => {
+        const radios = document.getElementsByName(`task-${index}`);
+        if ([...radios].find(r => r.checked && r.value === "1")) {
+          result += `- *${task}*\n`;
+        }
+      });
+
+      result += `\n  `;
+      const textArea = document.getElementById("result");
+      textArea.value = result;
+
+      textArea.select();
+      textArea.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+
+      showToast("Texto gerado e copiado para a área de transferência!");
+    }
+
+    function clearSelection() {
+      tasks.forEach((_, index) => {
+        const radios = document.getElementsByName(`task-${index}`);
+        radios.forEach(r => {
+          if (r.value === "0") r.checked = true;
+        });
+      });
+      clearText();
+    }
+
+    function clearText() {
+      document.getElementById("result").value = "";
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.classList.toggle("show");
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.createElement("div");
+      toast.textContent = message;
+      toast.style.position = "fixed";
+      toast.style.bottom = "20px";
+      toast.style.right = "20px";
+      toast.style.padding = "12px 20px";
+      toast.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+      toast.style.color = "white";
+      toast.style.borderRadius = "6px";
+      toast.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+      toast.style.zIndex = "9999";
+      toast.style.opacity = "0";
+      toast.style.transition = "opacity 0.5s ease";
+
+      document.body.appendChild(toast);
+      setTimeout(() => toast.style.opacity = "1", 100);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => document.body.removeChild(toast), 500);
+      }, 3000);
+    }
+  </script>
+
+  <p id="userStatus" style="display: none;">Usuário logado: <span id="userDisplay"></span></p>
+
+  <footer style="text-align: center; font-size: 12px; color: #999; margin-top: 40px; padding: 15px 10px; user-select: none;">
+    Ambiente interno de suporte à implantação Animati |
+    Uso exclusivo da equipe |
+    Contribuições são bem-vindas
+    <br>
+    <span style="color: #bbb;">Em desenvolvimento por Antonio Furtado · 2025</span>
+  </footer>
 </body>
 </html>
