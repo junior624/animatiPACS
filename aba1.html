@@ -13,7 +13,7 @@
     h1 {
       text-align: center;
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .navbar {
       background-color: #007BFF;
@@ -190,6 +190,10 @@
   </div>
 
   <h1>Fase de Cadastros | netRIS</h1>
+  <div style="text-align: center; font-size: 14px; color: #555;">
+    Usuário logado: <strong><span id="userDisplay">Carregando...</span></strong>
+  </div>
+
   <div id="tasks-container"></div>
 
   <div class="buttons">
@@ -201,6 +205,40 @@
   <textarea id="result" readonly></textarea>
 
   <script>
+    let linkPersonalizado = "https://calendar.app.google/bXvEVsiGCziT94sw5";
+    let userCarregado = false;
+
+    async function carregarUsuario() {
+      const usuario = localStorage.getItem("loggedUser");
+
+      if (!usuario) {
+        showToast("Usuário não identificado. Faça login.", true);
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const response = await fetch('usuarios.json');
+        const usuarios = await response.json();
+        const user = usuarios.find(u => u.usuario.toLowerCase() === usuario.toLowerCase());
+
+        if (!user) {
+          showToast("Usuário inválido.", true);
+          window.location.href = "index.html";
+          return;
+        }
+
+        linkPersonalizado = user.link;
+        userCarregado = true;
+        document.getElementById("userDisplay").textContent = user.usuario;
+      } catch (err) {
+        showToast("Erro ao carregar usuário.", true);
+        console.error(err);
+      }
+    }
+
+    carregarUsuario();
+
     const secoes = [
       {
         nome: "Cadastro de Usuários",
@@ -311,9 +349,6 @@
       sectionDiv.appendChild(content);
       container.appendChild(sectionDiv);
     });
-
-    let linkPersonalizado = "https://calendar.app.google/bXvEVsiGCziT94sw5";
-    let userCarregado = true;
 
     function generateText() {
       if (!userCarregado) {
