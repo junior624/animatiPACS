@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png" type="image/png">
   <meta charset="UTF-8">
   <title>Fase de Cadastros | animatiPACS</title>
   <style>
-    /* (estilos mantidos iguais ao original) */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -90,31 +88,41 @@
       }
     }
     #tasks-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 1400px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 0 20px;
     }
-    @media (max-width: 1100px) {
-      #tasks-container {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .collapsible-section {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    @media (max-width: 700px) {
-      #tasks-container {
-        grid-template-columns: 1fr;
-      }
+    .section-header {
+      width: 100%;
+      background-color: #007BFF;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: left;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+    }
+    .section-content.collapsed {
+      display: none;
     }
     .task {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #fff;
       padding: 15px 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-top: 1px solid #ddd;
+    }
+    .task:first-child {
+      border-top: none;
     }
     .task-label {
       flex: 1;
@@ -173,7 +181,7 @@
   <div class="navbar">
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul class="menu" id="menu">
-      <li><a href="cadastrosPacs.html" >Fase de Cadastros AP</a></li>
+      <li><a href="cadastrosPacs.html">Fase de Cadastros AP</a></li>
       <li><a href="aba1.html" class="active">Fase de Cadastros NR</a></li>
       <li><a href="aba2.html">Teste - Homologação AP</a></li>
       <li><a href="aba3.html">aba nova 3</a></li>
@@ -182,7 +190,6 @@
   </div>
 
   <h1>Fase de Cadastros | netRIS</h1>
-
   <div id="tasks-container"></div>
 
   <div class="buttons">
@@ -194,90 +201,119 @@
   <textarea id="result" readonly></textarea>
 
   <script>
-    const tasks = [
-      "Cadastrar usuários (colaboradores que irão acessar o sistema e médicos executantes)",
-      "Cadastrar grupos de usuários",
-      "Criar grupo de honorários e cadastrar regras",
-      "Cadastrar itens de honorário médico",
-      "Cadastrar dados da clínica (empresa)",
-      "Cadastrar dados das filiais",
-      "Cadastrar modalidades e procedimentos",
-      "Cadastrar aparelhos para agendamento",
-      "Cadastrar salas para agendamento",
-      "Cadastrar escalas de atendimento",
-      "Cadastrar indisponibilidades",
-      "Cadastrar restrições de agendamento",
-      "Cadastro e apresentação do agendamento online",
-      "Cadastrar categorias de estoque",
-      "Cadastrar estoques",
-      "Cadastrar fornecedores",
-      "Cadastrar materiais e kits de materiais",
-      "Cadastrar plano de contas",
-      "Cadastrar centros de custo",
-      "Cadastrar contas e caixas",
-      "Cadastrar formas de pagamento",
-      "Cadastrar convênios",
-      "Cadastrar planos",
-      "Cadastrar tabelas de preço",
-      "Cadastrar indexadores e portes",
-      "Precificar procedimentos e vincular a tabelas",
-      "Criar regras de atendimento",
-      "Criar motivos de situação",
-      "Cadastrar formas de entrega",
-      "Cadastrar modelos de impressão",
-      "Criar usuários no NetReport",
-      "Demonstrar o funcionamento do NetReport",
-      "Verificar se há interesse em integração com emissão de NF e WhatsApp",
-      "Espaço para teste",
-      "Espaço para teste",
-      "Espaço para teste"
+    const secoes = [
+      {
+        nome: "Cadastro de Usuários",
+        perguntas: [
+          "Cadastrar usuários (colaboradores que irão acessar o sistema e médicos executantes)",
+          "Cadastrar grupos de usuários",
+          "Criar grupo de honorários e cadastrar regras"
+        ]
+      },
+      {
+        nome: "Dados da Clínica",
+        perguntas: [
+          "Cadastrar dados da clínica (empresa)",
+          "Cadastrar dados das filiais"
+        ]
+      },
+      {
+        nome: "Agendamento",
+        perguntas: [
+          "Cadastrar modalidades e procedimentos",
+          "Cadastrar aparelhos para agendamento",
+          "Cadastrar salas para agendamento",
+          "Cadastrar escalas de atendimento",
+          "Cadastrar indisponibilidades",
+          "Cadastrar restrições de agendamento"
+        ]
+      },
+      {
+        nome: "Estoque",
+        perguntas: [
+          "Cadastrar categorias de estoque",
+          "Cadastrar estoques",
+          "Cadastrar fornecedores",
+          "Cadastrar materiais e kits de materiais"
+        ]
+      },
+      {
+        nome: "Financeiro",
+        perguntas: [
+          "Cadastrar plano de contas",
+          "Cadastrar centros de custo",
+          "Cadastrar contas e caixas",
+          "Cadastrar formas de pagamento",
+          "Cadastrar convênios",
+          "Cadastrar planos",
+          "Cadastrar tabelas de preço",
+          "Cadastrar indexadores e portes",
+          "Precificar procedimentos e vincular a tabelas"
+        ]
+      },
+      {
+        nome: "NetReport e Outros",
+        perguntas: [
+          "Criar regras de atendimento",
+          "Criar motivos de situação",
+          "Cadastrar formas de entrega",
+          "Cadastrar modelos de impressão",
+          "Criar usuários no NetReport",
+          "Demonstrar o funcionamento do NetReport",
+          "Verificar se há interesse em integração com emissão de NF e WhatsApp",
+          "Espaço para teste",
+          "Espaço para teste",
+          "Espaço para teste", 
+          "leite com bolachas"
+        ]
+      },
+      {
+        nome: "lista de compras",
+        perguntas: [
+          "miojinho",
+          "cafe",
+          "batata",
+          "açucar",
+          "alface",
+          "cenoura"
+        ]
+      }
     ];
 
     const container = document.getElementById("tasks-container");
-    tasks.forEach((task, index) => {
-      const div = document.createElement("div");
-      div.className = "task";
-      div.innerHTML = `
-        <div class="task-label">${task}</div>
-        <div class="radio-group">
-          <label><input type="radio" name="task-${index}" value="1"> Sim</label>
-          <label><input type="radio" name="task-${index}" value="0" checked> Não</label>
-        </div>
-      `;
-      container.appendChild(div);
+    let globalIndex = 0;
+    secoes.forEach(secao => {
+      const sectionDiv = document.createElement("div");
+      sectionDiv.className = "collapsible-section";
+
+      const header = document.createElement("button");
+      header.className = "section-header";
+      header.textContent = secao.nome;
+      const content = document.createElement("div");
+      content.className = "section-content collapsed";
+
+      header.onclick = () => content.classList.toggle("collapsed");
+
+      secao.perguntas.forEach(pergunta => {
+        const taskDiv = document.createElement("div");
+        taskDiv.className = "task";
+        taskDiv.innerHTML = `
+          <div class="task-label">${pergunta}</div>
+          <div class="radio-group">
+            <label><input type="radio" name="task-${globalIndex}" value="1"> Sim</label>
+            <label><input type="radio" name="task-${globalIndex}" value="0" checked> Não</label>
+          </div>`;
+        content.appendChild(taskDiv);
+        globalIndex++;
+      });
+
+      sectionDiv.appendChild(header);
+      sectionDiv.appendChild(content);
+      container.appendChild(sectionDiv);
     });
 
-    let linkPersonalizado = "";
-    let userCarregado = false;
-
-    async function carregarUsuario() {
-      const usuario = localStorage.getItem("loggedUser");
-      if (!usuario) {
-        showToast("Usuário não identificado. Faça login.", true);
-        window.location.href = "index.html";
-        return;
-      }
-
-      try {
-        const response = await fetch('usuarios.json');
-        const usuarios = await response.json();
-        const user = usuarios.find(u => u.usuario.toLowerCase() === usuario.toLowerCase());
-        if (!user) {
-          showToast("Usuário inválido.", true);
-          window.location.href = "index.html";
-          return;
-        }
-
-        linkPersonalizado = user.link;
-        userCarregado = true;
-        document.getElementById("userDisplay").textContent = user.usuario;
-      } catch (err) {
-        showToast("Erro ao carregar usuário.", true);
-        console.error(err);
-      }
-    }
-
-    carregarUsuario();
+    let linkPersonalizado = "https://calendar.app.google/bXvEVsiGCziT94sw5";
+    let userCarregado = true;
 
     function generateText() {
       if (!userCarregado) {
@@ -286,31 +322,41 @@
       }
 
       let result = "Conforme conversamos, segue lista de pendências da implantação netRIS relativas ao nosso último encontro:\n\n";
-      tasks.forEach((task, index) => {
-        const radios = document.getElementsByName(`task-${index}`);
-        if ([...radios].find(r => r.checked && r.value === "1")) {
-          result += `- *${task}*\n`;
+      let perguntaGlobalIndex = 0;
+
+      secoes.forEach(secao => {
+        let pendencias = [];
+        secao.perguntas.forEach(() => {
+          const radios = document.getElementsByName(`task-${perguntaGlobalIndex}`);
+          const marcado = [...radios].find(r => r.checked && r.value === "1");
+          if (marcado) {
+            const label = radios[0].closest('.task').querySelector('.task-label').textContent;
+            pendencias.push(`- *${label}*`);
+          }
+          perguntaGlobalIndex++;
+        });
+
+        if (pendencias.length > 0) {
+          result += `> ${secao.nome}:\n`;
+          result += pendencias.join("\n") + "\n\n";
         }
       });
 
-      result += `\nCaso seja necessário, é possível marcar um encontro de 15 minutos através do link: ${linkPersonalizado}`;
+      result += `Caso seja necessário, é possível marcar um encontro de 15 minutos através do link: ${linkPersonalizado}`;
+
       const textArea = document.getElementById("result");
       textArea.value = result;
-
       textArea.select();
       textArea.setSelectionRange(0, 99999);
       document.execCommand("copy");
-
       showToast("Texto gerado e copiado para a área de transferência!");
     }
 
     function clearSelection() {
-      tasks.forEach((_, index) => {
-        const radios = document.getElementsByName(`task-${index}`);
-        radios.forEach(r => {
-          if (r.value === "0") r.checked = true;
-        });
-      });
+      const total = document.querySelectorAll('[name^="task-"]').length / 2;
+      for (let i = 0; i < total; i++) {
+        document.querySelector(`input[name='task-${i}'][value='0']`).checked = true;
+      }
       clearText();
     }
 
@@ -347,13 +393,10 @@
     }
   </script>
 
-  <p id="userStatus" style="display: none;">Usuário logado: <span id="userDisplay"></span></p>
-
   <footer style="text-align: center; font-size: 12px; color: #999; margin-top: 40px; padding: 15px 10px; user-select: none;">
     Ambiente interno de suporte à implantação Animati |
     Uso exclusivo da equipe |
-    Contribuições são bem-vindas
-    <br>
+    Contribuições são bem-vindas<br>
     <span style="color: #bbb;">Em desenvolvimento</span>
   </footer>
 </body>
